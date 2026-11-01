@@ -1,0 +1,1112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Portfolio Builder</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="app">
+      <header>
+        <div class="logo">
+          <span class="logo-icon">✨</span>
+          <span class="logo-text">AI Portfolio <span>Builder</span></span>
+        </div>
+        <div class="header-right">
+          <button class="btn-saves" onclick="toggleSavesPanel()">
+            💾 Saved
+          </button>
+          <span class="badge">Powered by AI</span>
+          <span class="badge">Free</span>
+        </div>
+      </header>
+
+      <!-- Saves Panel -->
+      <div id="saves-panel" class="hidden">
+        <div class="saves-header">
+          <h3>💾 Saved Portfolios</h3>
+          <button onclick="toggleSavesPanel()">✕</button>
+        </div>
+        <div id="saves-list">
+          <div class="panel-empty">No saved portfolios yet</div>
+        </div>
+      </div>
+
+      <main id="main-content">
+        <!-- Landing -->
+        <div id="landing-screen">
+          <div class="landing-hero">
+            <div class="landing-tag">✨ AI-Generated · Professional · Free</div>
+            <h1>Build Your Dream Portfolio<br /><span>in 60 Seconds</span></h1>
+            <p>
+              Answer a few questions and our AI generates a stunning,
+              professional portfolio website — ready to download and deploy.
+            </p>
+            <button class="btn-start" onclick="startBuilder()">
+              🚀 Start Building Free
+            </button>
+          </div>
+
+          <div class="landing-examples">
+            <div class="example-card" onclick="setThemePreview('dark')">
+              <div class="example-preview dark-preview">
+                <div class="prev-nav" style="background: #e94560"></div>
+                <div class="prev-hero"></div>
+                <div class="prev-cards">
+                  <div class="prev-card"></div>
+                  <div class="prev-card"></div>
+                </div>
+              </div>
+              <div class="example-label">Dark Red</div>
+            </div>
+            <div class="example-card" onclick="setThemePreview('blue')">
+              <div class="example-preview blue-preview">
+                <div class="prev-nav" style="background: #4f8ef7"></div>
+                <div class="prev-hero"></div>
+                <div class="prev-cards">
+                  <div class="prev-card"></div>
+                  <div class="prev-card"></div>
+                </div>
+              </div>
+              <div class="example-label">Dark Blue</div>
+            </div>
+            <div class="example-card" onclick="setThemePreview('minimal')">
+              <div class="example-preview minimal-preview">
+                <div class="prev-nav" style="background: #2563eb"></div>
+                <div class="prev-hero" style="background: #f3f4f6"></div>
+                <div class="prev-cards">
+                  <div class="prev-card" style="background: #e5e7eb"></div>
+                  <div class="prev-card" style="background: #e5e7eb"></div>
+                </div>
+              </div>
+              <div class="example-label">Minimal</div>
+            </div>
+            <div class="example-card" onclick="setThemePreview('purple')">
+              <div class="example-preview purple-preview">
+                <div class="prev-nav" style="background: #8b5cf6"></div>
+                <div class="prev-hero"></div>
+                <div class="prev-cards">
+                  <div class="prev-card"></div>
+                  <div class="prev-card"></div>
+                </div>
+              </div>
+              <div class="example-label">Purple</div>
+            </div>
+          </div>
+
+          <div class="landing-features">
+            <div class="lf-item"><span>⚡</span> 30 second generation</div>
+            <div class="lf-item"><span>🎨</span> 12 themes</div>
+            <div class="lf-item"><span>📥</span> Download HTML</div>
+            <div class="lf-item"><span>💾</span> Save portfolios</div>
+            <div class="lf-item"><span>📝</span> Cover letter AI</div>
+            <div class="lf-item"><span>🎥</span> Video script AI</div>
+            <div class="lf-item"><span>📊</span> AI scoring</div>
+            <div class="lf-item"><span>✏️</span> Live editing</div>
+          </div>
+        </div>
+
+        <!-- Builder -->
+        <div id="builder-screen" class="hidden">
+          <div class="steps-bar">
+            <div class="step active" id="step-dot-1">
+              <div class="step-num">1</div>
+              <div class="step-label">Personal</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step-dot-2">
+              <div class="step-num">2</div>
+              <div class="step-label">Skills</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step-dot-3">
+              <div class="step-num">3</div>
+              <div class="step-label">Projects</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step-dot-4">
+              <div class="step-num">4</div>
+              <div class="step-label">Style</div>
+            </div>
+          </div>
+
+          <!-- Step 1 -->
+          <div class="form-step" id="step-1">
+            <div class="step-header">
+              <h2>👤 Tell us about yourself</h2>
+              <p>This will be the foundation of your portfolio</p>
+            </div>
+
+            <div class="photo-upload-section">
+              <div
+                class="photo-preview"
+                id="photo-preview"
+                onclick="document.getElementById('photo-input').click()"
+              >
+                <div class="photo-placeholder" id="photo-placeholder">
+                  <i class="fas fa-camera"></i>
+                  <span>Upload Photo</span>
+                </div>
+                <img id="photo-img" class="hidden" alt="Profile" />
+              </div>
+              <div class="photo-info">
+                <h4>Profile Photo</h4>
+                <p>Add a professional photo to make your portfolio stand out</p>
+                <button
+                  class="btn-upload-photo"
+                  onclick="document.getElementById('photo-input').click()"
+                >
+                  📸 Choose Photo
+                </button>
+                <button
+                  class="btn-remove-photo hidden"
+                  id="btn-remove-photo"
+                  onclick="removePhoto()"
+                >
+                  ✕ Remove
+                </button>
+              </div>
+              <input
+                type="file"
+                id="photo-input"
+                accept="image/*"
+                class="hidden"
+                onchange="handlePhotoUpload(this)"
+              />
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name *</label
+                ><input
+                  type="text"
+                  id="f-name"
+                  placeholder="e.g. Keonho Wang"
+                />
+              </div>
+              <div class="form-group">
+                <label>Professional Title *</label
+                ><input
+                  type="text"
+                  id="f-title"
+                  placeholder="e.g. Full Stack Developer"
+                />
+              </div>
+              <div class="form-group full">
+                <label>Bio / About Me</label
+                ><textarea
+                  id="f-bio"
+                  placeholder="Write 2-3 sentences about yourself..."
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label>Email</label
+                ><input
+                  type="email"
+                  id="f-email"
+                  placeholder="your@email.com"
+                />
+              </div>
+              <div class="form-group">
+                <label>GitHub Username</label
+                ><input
+                  type="text"
+                  id="f-github"
+                  placeholder="e.g. KeonhoWang"
+                />
+              </div>
+              <div class="form-group full">
+                <label>LinkedIn URL</label
+                ><input
+                  type="text"
+                  id="f-linkedin"
+                  placeholder="https://linkedin.com/in/yourname"
+                />
+              </div>
+            </div>
+            <div class="step-btns">
+              <button class="btn-back" onclick="goToLanding()">← Back</button>
+              <button class="btn-next" onclick="nextStep(1)">
+                Next: Skills →
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="form-step hidden" id="step-2">
+            <div class="step-header">
+              <h2>⚡ What are your skills?</h2>
+              <p>List your technical and professional skills</p>
+            </div>
+            <div class="form-group" style="margin-bottom: 16px">
+              <label>Skills (comma separated)</label>
+              <input
+                type="text"
+                id="f-skills"
+                placeholder="e.g. React, Python, Node.js, CSS..."
+              />
+            </div>
+            <div class="skill-suggestions">
+              <div class="skill-suggestion-label">Quick add:</div>
+              <div class="skill-tags">
+                <button onclick="addSkill('React')">React</button>
+                <button onclick="addSkill('Python')">Python</button>
+                <button onclick="addSkill('JavaScript')">JavaScript</button>
+                <button onclick="addSkill('Node.js')">Node.js</button>
+                <button onclick="addSkill('TypeScript')">TypeScript</button>
+                <button onclick="addSkill('HTML/CSS')">HTML/CSS</button>
+                <button onclick="addSkill('SQL')">SQL</button>
+                <button onclick="addSkill('Git')">Git</button>
+                <button onclick="addSkill('Docker')">Docker</button>
+                <button onclick="addSkill('AWS')">AWS</button>
+                <button onclick="addSkill('Flutter')">Flutter</button>
+                <button onclick="addSkill('Swift')">Swift</button>
+                <button onclick="addSkill('Java')">Java</button>
+                <button onclick="addSkill('C++')">C++</button>
+                <button onclick="addSkill('PHP')">PHP</button>
+                <button onclick="addSkill('Vue.js')">Vue.js</button>
+                <button onclick="addSkill('MongoDB')">MongoDB</button>
+                <button onclick="addSkill('Firebase')">Firebase</button>
+                <button onclick="addSkill('Next.js')">Next.js</button>
+                <button onclick="addSkill('TailwindCSS')">TailwindCSS</button>
+              </div>
+            </div>
+            <div class="step-btns">
+              <button class="btn-back" onclick="prevStep(2)">← Back</button>
+              <button class="btn-next" onclick="nextStep(2)">
+                Next: Projects →
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="form-step hidden" id="step-3">
+            <div class="step-header">
+              <h2>🚀 Add your projects</h2>
+              <p>Showcase your best work — up to 6 projects</p>
+            </div>
+            <div id="projects-container">
+              <div class="project-entry" id="project-0">
+                <div class="project-entry-header"><span>Project 1</span></div>
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label>Project Name</label
+                    ><input
+                      type="text"
+                      class="p-name"
+                      placeholder="e.g. Chat App"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label>Tech Stack</label
+                    ><input
+                      type="text"
+                      class="p-tech"
+                      placeholder="e.g. React, Node.js"
+                    />
+                  </div>
+                  <div class="form-group full">
+                    <label>Description</label
+                    ><input
+                      type="text"
+                      class="p-desc"
+                      placeholder="Brief description..."
+                    />
+                  </div>
+                  <div class="form-group full">
+                    <label>GitHub / Live URL</label
+                    ><input
+                      type="text"
+                      class="p-url"
+                      placeholder="https://github.com/..."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn-add-project"
+              onclick="addProject()"
+              id="add-project-btn"
+            >
+              + Add Another Project
+            </button>
+            <div class="step-btns">
+              <button class="btn-back" onclick="prevStep(3)">← Back</button>
+              <button class="btn-next" onclick="nextStep(3)">
+                Next: Style →
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="form-step hidden" id="step-4">
+            <div class="step-header">
+              <h2>🎨 Choose your style</h2>
+              <p>Pick a theme and font that matches your personality</p>
+            </div>
+
+            <div class="style-section">
+              <label class="style-label">Color Theme (12 options)</label>
+              <div class="theme-grid">
+                <div
+                  class="theme-option active"
+                  data-theme="dark"
+                  onclick="selectTheme('dark')"
+                >
+                  <div class="theme-preview" style="background: #0a0a0f">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #e94560;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1e1e2e;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1e1e2e;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Red</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="blue"
+                  onclick="selectTheme('blue')"
+                >
+                  <div class="theme-preview" style="background: #0a0f1a">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #4f8ef7;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1a2535;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1a2535;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Blue</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="purple"
+                  onclick="selectTheme('purple')"
+                >
+                  <div class="theme-preview" style="background: #0d0a1a">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #8b5cf6;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1e1835;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1e1835;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Purple</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="green"
+                  onclick="selectTheme('green')"
+                >
+                  <div class="theme-preview" style="background: #0a0f0a">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #22c55e;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1a2e1a;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1a2e1a;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Green</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="orange"
+                  onclick="selectTheme('orange')"
+                >
+                  <div class="theme-preview" style="background: #0f0a05">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #f97316;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e1e05;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e1e05;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Orange</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="minimal"
+                  onclick="selectTheme('minimal')"
+                >
+                  <div
+                    class="theme-preview"
+                    style="background: #fff; border: 1px solid #e5e7eb"
+                  >
+                    <div
+                      style="
+                        height: 6px;
+                        background: #2563eb;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #e5e7eb;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #e5e7eb;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Minimal</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="pink"
+                  onclick="selectTheme('pink')"
+                >
+                  <div class="theme-preview" style="background: #0f0a0f">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #ec4899;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e1535;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e1535;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Pink</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="teal"
+                  onclick="selectTheme('teal')"
+                >
+                  <div class="theme-preview" style="background: #0a0f0f">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #14b8a6;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1a2e2e;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #1a2e2e;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Teal</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="yellow"
+                  onclick="selectTheme('yellow')"
+                >
+                  <div class="theme-preview" style="background: #0f0f05">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #eab308;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e2e10;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e2e10;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Dark Yellow</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="midnight"
+                  onclick="selectTheme('midnight')"
+                >
+                  <div class="theme-preview" style="background: #05050f">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #6366f1;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #15153a;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #15153a;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Midnight</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="rose"
+                  onclick="selectTheme('rose')"
+                >
+                  <div class="theme-preview" style="background: #0f0505">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #f43f5e;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e1520;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #2e1520;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Rose</span>
+                </div>
+                <div
+                  class="theme-option"
+                  data-theme="cyan"
+                  onclick="selectTheme('cyan')"
+                >
+                  <div class="theme-preview" style="background: #050f0f">
+                    <div
+                      style="
+                        height: 6px;
+                        background: #06b6d4;
+                        border-radius: 3px;
+                        margin-bottom: 4px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #102e35;
+                        border-radius: 2px;
+                        margin-bottom: 2px;
+                      "
+                    ></div>
+                    <div
+                      style="
+                        height: 3px;
+                        background: #102e35;
+                        border-radius: 2px;
+                        width: 70%;
+                      "
+                    ></div>
+                  </div>
+                  <span>Cyan</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="style-section">
+              <label class="style-label">Font Style</label>
+              <div class="font-grid">
+                <div
+                  class="font-option active"
+                  data-font="modern"
+                  onclick="selectFont('modern')"
+                >
+                  <span class="font-preview" style="font-family: sans-serif"
+                    >Aa</span
+                  ><span>Modern</span>
+                </div>
+                <div
+                  class="font-option"
+                  data-font="elegant"
+                  onclick="selectFont('elegant')"
+                >
+                  <span class="font-preview" style="font-family: Georgia"
+                    >Aa</span
+                  ><span>Elegant</span>
+                </div>
+                <div
+                  class="font-option"
+                  data-font="tech"
+                  onclick="selectFont('tech')"
+                >
+                  <span class="font-preview" style="font-family: monospace"
+                    >Aa</span
+                  ><span>Tech</span>
+                </div>
+                <div
+                  class="font-option"
+                  data-font="playful"
+                  onclick="selectFont('playful')"
+                >
+                  <span class="font-preview" style="font-family: cursive"
+                    >Aa</span
+                  ><span>Playful</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="step-btns">
+              <button class="btn-back" onclick="prevStep(4)">← Back</button>
+              <button class="btn-generate" onclick="generatePortfolio()">
+                <span id="gen-btn-text">✨ Generate My Portfolio</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generating -->
+        <div id="generating-screen" class="hidden">
+          <div class="generating-wrap">
+            <div class="generating-ring">
+              <div class="gen-ring-1"></div>
+              <div class="gen-ring-2"></div>
+              <div class="gen-ring-3"></div>
+              <div class="gen-core">✨</div>
+            </div>
+            <h2 class="gen-title">AI is crafting your portfolio...</h2>
+            <div class="gen-steps">
+              <div class="gen-step" id="gen-step-1">
+                ⚡ Analyzing your information
+              </div>
+              <div class="gen-step" id="gen-step-2">
+                🎨 Designing your layout
+              </div>
+              <div class="gen-step" id="gen-step-3">💻 Writing your code</div>
+              <div class="gen-step" id="gen-step-4">
+                ✨ Adding finishing touches
+              </div>
+            </div>
+            <div class="gen-progress">
+              <div class="gen-progress-fill" id="gen-progress-fill"></div>
+            </div>
+            <div class="gen-tip">💡 This usually takes 20-40 seconds</div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div id="result-screen" class="hidden">
+          <div class="result-header">
+            <div class="result-title-row">
+              <h2>🎉 Your portfolio is ready!</h2>
+              <div class="result-actions">
+                <button class="btn-score" onclick="scorePortfolio()">
+                  📊 Score
+                </button>
+                <button class="btn-edit" onclick="toggleEditPanel()">
+                  ✏️ Edit
+                </button>
+                <button class="btn-cover" onclick="toggleCoverPanel()">
+                  📝 Cover Letter
+                </button>
+                <button class="btn-script" onclick="toggleScriptPanel()">
+                  🎥 Video Script
+                </button>
+                <button class="btn-save-port" onclick="saveCurrentPortfolio()">
+                  💾 Save
+                </button>
+                <button class="btn-regenerate" onclick="regenerate()">
+                  🔄 Redo
+                </button>
+                <button class="btn-download" onclick="downloadPortfolio()">
+                  📥 Download
+                </button>
+                <button class="btn-new" onclick="buildNew()">✨ New</button>
+              </div>
+            </div>
+            <p class="result-sub">
+              Preview below — download the HTML file to deploy anywhere
+            </p>
+          </div>
+
+          <!-- Score Panel -->
+          <div id="score-panel" class="hidden result-panel">
+            <div class="result-panel-header">
+              <h3>📊 AI Portfolio Score</h3>
+              <button onclick="closePanel('score-panel')">✕</button>
+            </div>
+            <div id="score-content">
+              <div class="panel-loading">
+                <div class="spinner"></div>
+                <span>AI is reviewing your portfolio...</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Panel -->
+          <div id="edit-panel" class="hidden result-panel">
+            <div class="result-panel-header">
+              <h3>✏️ Live AI Edit</h3>
+              <button onclick="closePanel('edit-panel')">✕</button>
+            </div>
+            <div class="edit-panel-body">
+              <p class="edit-hint">
+                Describe what you want to change — AI applies it instantly!
+              </p>
+              <div class="edit-examples">
+                <button
+                  onclick="setEditText('Change the primary color to gold')"
+                >
+                  Gold color
+                </button>
+                <button onclick="setEditText('Make the hero section bigger')">
+                  Bigger hero
+                </button>
+                <button onclick="setEditText('Add a dark mode toggle button')">
+                  Dark mode toggle
+                </button>
+                <button
+                  onclick="setEditText('Make the font larger throughout')"
+                >
+                  Larger font
+                </button>
+                <button
+                  onclick="setEditText('Add more animations and effects')"
+                >
+                  More animations
+                </button>
+                <button onclick="setEditText('Add a testimonials section')">
+                  Add testimonials
+                </button>
+              </div>
+              <textarea
+                id="edit-input"
+                placeholder="e.g. Change the hero background to a gradient..."
+              ></textarea>
+              <button class="btn-apply-edit" onclick="applyEdit()">
+                <span id="edit-btn-text">✨ Apply Changes</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Cover Letter Panel -->
+          <div id="cover-panel" class="hidden result-panel">
+            <div class="result-panel-header">
+              <h3>📝 AI Cover Letter Generator</h3>
+              <button onclick="closePanel('cover-panel')">✕</button>
+            </div>
+            <div class="cover-panel-body">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Company Name</label>
+                  <input
+                    type="text"
+                    id="cover-company"
+                    placeholder="e.g. Google, Samsung..."
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Job Title</label>
+                  <input
+                    type="text"
+                    id="cover-job"
+                    placeholder="e.g. Frontend Developer"
+                  />
+                </div>
+                <div class="form-group full">
+                  <label>Tone</label>
+                  <div class="tone-btns">
+                    <button
+                      class="tone-btn active"
+                      data-tone="professional"
+                      onclick="selectTone('professional')"
+                    >
+                      Professional
+                    </button>
+                    <button
+                      class="tone-btn"
+                      data-tone="enthusiastic"
+                      onclick="selectTone('enthusiastic')"
+                    >
+                      Enthusiastic
+                    </button>
+                    <button
+                      class="tone-btn"
+                      data-tone="casual"
+                      onclick="selectTone('casual')"
+                    >
+                      Casual
+                    </button>
+                    <button
+                      class="tone-btn"
+                      data-tone="formal"
+                      onclick="selectTone('formal')"
+                    >
+                      Formal
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="btn-generate-cover"
+                onclick="generateCoverLetter()"
+              >
+                <span id="cover-btn-text">📝 Generate Cover Letter</span>
+              </button>
+              <div id="cover-result" class="hidden">
+                <div class="cover-letter-text" id="cover-letter-text"></div>
+                <div class="cover-actions">
+                  <button onclick="copyCoverLetter()">📋 Copy</button>
+                  <button onclick="downloadCoverLetter()">📥 Download</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Video Script Panel -->
+          <div id="script-panel" class="hidden result-panel">
+            <div class="result-panel-header">
+              <h3>🎥 Portfolio Video Script</h3>
+              <button onclick="closePanel('script-panel')">✕</button>
+            </div>
+            <div class="script-panel-body">
+              <div class="form-group" style="margin-bottom: 12px">
+                <label>Video Duration</label>
+                <div class="duration-btns">
+                  <button
+                    class="dur-btn active"
+                    data-dur="30"
+                    onclick="selectDuration('30')"
+                  >
+                    30 sec
+                  </button>
+                  <button
+                    class="dur-btn"
+                    data-dur="60"
+                    onclick="selectDuration('60')"
+                  >
+                    60 sec
+                  </button>
+                  <button
+                    class="dur-btn"
+                    data-dur="90"
+                    onclick="selectDuration('90')"
+                  >
+                    90 sec
+                  </button>
+                  <button
+                    class="dur-btn"
+                    data-dur="120"
+                    onclick="selectDuration('120')"
+                  >
+                    2 min
+                  </button>
+                </div>
+              </div>
+              <button
+                class="btn-generate-script"
+                onclick="generateVideoScript()"
+              >
+                <span id="script-btn-text">🎥 Generate Script</span>
+              </button>
+              <div id="script-result" class="hidden">
+                <div class="video-script-text" id="video-script-text"></div>
+                <div class="cover-actions">
+                  <button onclick="copyScript()">📋 Copy</button>
+                  <button onclick="downloadScript()">📥 Download</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="preview-wrap">
+            <div class="preview-bar">
+              <div class="preview-dots">
+                <div class="preview-dot red"></div>
+                <div class="preview-dot yellow"></div>
+                <div class="preview-dot green"></div>
+              </div>
+              <div class="preview-url" id="preview-url">portfolio.html</div>
+              <div class="preview-device-btns">
+                <button
+                  onclick="setPreviewSize('desktop')"
+                  class="device-btn active"
+                  id="btn-desktop"
+                >
+                  🖥
+                </button>
+                <button
+                  onclick="setPreviewSize('tablet')"
+                  class="device-btn"
+                  id="btn-tablet"
+                >
+                  ⬛
+                </button>
+                <button
+                  onclick="setPreviewSize('mobile')"
+                  class="device-btn"
+                  id="btn-mobile"
+                >
+                  📱
+                </button>
+              </div>
+            </div>
+            <div class="preview-container" id="preview-container">
+              <iframe
+                id="preview-frame"
+                sandbox="allow-scripts allow-same-origin"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

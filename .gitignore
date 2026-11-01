@@ -1,0 +1,5 @@
+.env
+__pycache__/
+*.pyc
+saved_portfolios.json
+.DS_Store
